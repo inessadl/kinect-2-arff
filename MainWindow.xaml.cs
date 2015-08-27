@@ -16,6 +16,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
+    using System.Windows.Forms;
 
     /// <summary>
     /// Interaction logic for the MainWindow
@@ -39,6 +40,41 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             0xFF40FF00,
             0xFF808000,
         };
+
+
+
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //Button button = sender as Button;
+
+            //if (_recorder.IsRecording)
+            //{
+            //    _recorder.Stop();
+
+            //    button.Content = "Start";
+
+            //    SaveFileDialog dialog = new SaveFileDialog
+            //    {
+            //        Filter = "WEKA files|*.arff"
+            //    };
+
+            //    dialog.ShowDialog();
+
+            //    if (!string.IsNullOrWhiteSpace(dialog.FileName))
+            //    {
+            //        System.IO.File.Copy(_recorder.Result, dialog.FileName);
+            //    }
+            //}
+            //else
+            //{
+            //    _recorder.Start();
+
+            //    button.Content = "Stop";
+            //}
+            Console.WriteLine("TESTEEEEEEEEE");
+        }
+
 
         /// <summary>
         /// Active Kinect sensor
@@ -69,6 +105,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// Current status text to display
         /// </summary>
         private string statusText = null;
+
+
 
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
@@ -107,6 +145,9 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
             // initialize the components (controls) of the window
             this.InitializeComponent();
+
+
+
         }
 
         /// <summary>
