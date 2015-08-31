@@ -16,7 +16,13 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
-    using System.Windows.Forms;
+    //using System.Windows.Forms;
+    using System.Windows.Controls;
+    //using System.Windows.Forms.Button;
+
+    
+
+
 
     /// <summary>
     /// Interaction logic for the MainWindow
@@ -44,36 +50,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
 
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //Button button = sender as Button;
-
-            //if (_recorder.IsRecording)
-            //{
-            //    _recorder.Stop();
-
-            //    button.Content = "Start";
-
-            //    SaveFileDialog dialog = new SaveFileDialog
-            //    {
-            //        Filter = "WEKA files|*.arff"
-            //    };
-
-            //    dialog.ShowDialog();
-
-            //    if (!string.IsNullOrWhiteSpace(dialog.FileName))
-            //    {
-            //        System.IO.File.Copy(_recorder.Result, dialog.FileName);
-            //    }
-            //}
-            //else
-            //{
-            //    _recorder.Start();
-
-            //    button.Content = "Stop";
-            //}
-            Console.WriteLine("TESTEEEEEEEEE");
-        }
+       
 
 
         /// <summary>
@@ -222,6 +199,9 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// <param name="e">event arguments</param>
         private void ScreenshotButton_Click(object sender, RoutedEventArgs e)
         {
+           // Button button = sender as Button;
+
+            
             if (this.bodyIndexBitmap != null)
             {
                 // create a png bitmap encoder which knows how to save a .png file
@@ -252,7 +232,43 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                     this.StatusText = string.Format(CultureInfo.CurrentCulture, Properties.Resources.FailedScreenshotStatusTextFormat, path);
                 }
             }
+
+           // button.Content = "Teste";
+
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            button.Content = "Batata";
+
+            //if (_recorder.IsRecording)
+            //{
+            //    _recorder.Stop();
+
+            //    button.Content = "Start";
+
+            //    SaveFileDialog dialog = new SaveFileDialog
+            //    {
+            //        Filter = "WEKA files|*.arff"
+            //    };
+
+            //    dialog.ShowDialog();
+
+            //    if (!string.IsNullOrWhiteSpace(dialog.FileName))
+            //    {
+            //        System.IO.File.Copy(_recorder.Result, dialog.FileName);
+            //    }
+            //}
+            //else
+            //{
+            //    _recorder.Start();
+
+            //    button.Content = "Stop";
+            //}
+            Console.WriteLine("TESTEEEEEEEEE");
+        }
+
 
         /// <summary>
         /// Handles the body index frame data arriving from the sensor
