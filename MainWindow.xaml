@@ -55,10 +55,10 @@
 
         <!--<Button Grid.Row="2" Content="Iniciar" Width="100" Height="40"  Margin="535,10,37,10" Click="Button_Click" />
         <Button Grid.Row="2" Content="Encerrar" Width="100" Height="40"  Margin="411,10,161,10" Click="Button_Click" />-->
-        
-        
-        <Button Grid.Row="2" Style="{StaticResource ScreenshotButton}" Content="Iniciar" Height="Auto" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,15,518,5" Click="Button_Click" />
-        <Button Grid.Row="2" Style="{StaticResource ScreenshotButton}" Content="Encerrar" Height="Auto" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,10,10" Click="Button_Click" />
+
+
+        <Button Grid.Row="2" Style="{StaticResource ScreenshotButton}" Content="Gravar" Height="Auto" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,196,10" Click="SaveButton_Click" />
+        <Button Grid.Row="2" Style="{StaticResource ScreenshotButton}" Content="Sair" Height="Auto" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,63,10" Click="CancelButton_Click" />
 
         <!--<Button Grid.Row="2" Style="{StaticResource ScreenshotButton}" Content="Screenshot" Height="Auto" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,10,10" Click="ScreenshotButton_Click" />-->
         <!--<Button Grid.Row="2" Style="{DynamicResource ScreenshotButton}" Content="Iniciar Gravação" Height="Auto" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,516,10" Click="ScreenshotButton_Click" Cursor="None" UseLayoutRounding="{DynamicResource {x:Static SystemParameters.FlatMenuKey}}" />-->

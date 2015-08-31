@@ -237,10 +237,18 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
-            button.Content = "Batata";
+
+            if (button.Content.Equals("Gravar"))
+            {
+                button.Content = "Salvar";
+            }
+            else
+            {
+                button.Content = "Gravar";
+            }
 
             //if (_recorder.IsRecording)
             //{
@@ -267,6 +275,22 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             //    button.Content = "Stop";
             //}
             Console.WriteLine("TESTEEEEEEEEE");
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+
+            if (button.Content.Equals("Sair"))
+            {
+                button.Content = "Descartar";
+            }
+            else
+            {
+                button.Content = "Sair";
+            }
+
+            
         }
 
 
