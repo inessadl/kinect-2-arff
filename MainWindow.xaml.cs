@@ -1,13 +1,10 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="MainWindow.xaml.cs" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
-
+﻿
 namespace Microsoft.Samples.Kinect.BodyIndexBasics
 {
+    using Microsoft.Win32;
     using System;
     using System.ComponentModel;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
@@ -37,6 +34,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// <summary>
         /// Collection of colors to be used to display the BodyIndexFrame data.
         /// </summary>
+        /// TODO: Trocar isso por vermelho para inválido e verde para válido (talvez uma outra cor para gravando)
         private static readonly uint[] BodyColor =
         {
             0x0000FF00,
@@ -47,11 +45,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             0xFF808000,
         };
 
-
-
-
-       
-
+   
 
         /// <summary>
         /// Active Kinect sensor
@@ -83,6 +77,12 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// </summary>
         private string statusText = null;
 
+        /// <sumarry>
+        /// Buffer to save data
+        /// </sumarry>
+        KinectFileManager _recorder = null;
+        BodyFrameReader _reader = null;
+        IList<Body> _bodies = null;
 
 
         /// <summary>
@@ -185,11 +185,6 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                 this.bodyIndexFrameReader = null;
             }
 
-            if (this.kinectSensor != null)
-            {
-                this.kinectSensor.Close();
-                this.kinectSensor = null;
-            }
         }
 
         /// <summary>
@@ -237,63 +232,79 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
         }
 
+        //TODO - implementar funcionalidades (dependente da interface)
+        //Começa a sessão - implementar
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        
+        //Guarda gesto
+        //Alterar para ao invés de mudar o conteúdo do botão, chamar outra barra com novos ícones
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
+            //Button button = sender as Button;
 
-            if (button.Content.Equals("Gravar"))
-            {
-                button.Content = "Salvar";
-            }
-            else
-            {
-                button.Content = "Gravar";
-            }
-
-            //if (_recorder.IsRecording)
+            //if (button.Content.Equals("Gravar"))
             //{
-            //    _recorder.Stop();
-
-            //    button.Content = "Start";
-
-            //    SaveFileDialog dialog = new SaveFileDialog
-            //    {
-            //        Filter = "WEKA files|*.arff"
-            //    };
-
-            //    dialog.ShowDialog();
-
-            //    if (!string.IsNullOrWhiteSpace(dialog.FileName))
-            //    {
-            //        System.IO.File.Copy(_recorder.Result, dialog.FileName);
-            //    }
+            //    button.Content = "Salvar";
             //}
             //else
             //{
-            //    _recorder.Start();
-
-            //    button.Content = "Stop";
+            //    button.Content = "Gravar";
             //}
-            Console.WriteLine("TESTEEEEEEEEE");
+
+
+            //Console.WriteLine("TESTEEEEEEEEE");
         }
 
+        //Descarta gesto
+        //Alterar para ao invés de mudar o conteúdo do botão, chamar outra barra com novos ícones
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
+            //Button button = sender as Button;
 
-            if (button.Content.Equals("Sair"))
-            {
-                button.Content = "Descartar";
-            }
-            else
-            {
-                button.Content = "Sair";
-            }
-
-            
+            //if (button.Content.Equals("Sair"))
+            //{
+            //    button.Content = "Descartar";
+            //}
+            //else
+            //{
+            //    button.Content = "Sair";
+            //}            
         }
 
+        //Sai e salva todas as instancias guardadas do gesto
+        //TODO - Trocar para formato Arff
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            _recorder.Stop();
 
+            //Trocar mudar o conteúdo por voltar para a tela inicial do programa
+            //button.Content = "Start";
+
+            //Save File
+            SaveFileDialog dialog = new SaveFileDialog
+            {
+                Filter = "Excel files|*.csv"
+            };
+
+            dialog.ShowDialog();
+
+            if (!string.IsNullOrWhiteSpace(dialog.FileName))
+            {
+                System.IO.File.Copy(_recorder.Result, dialog.FileName);
+            }
+
+            //Close kinect
+            if (this.kinectSensor != null)
+            {
+                this.kinectSensor.Close();
+                this.kinectSensor = null;
+            }
+            
+        }
+        
         /// <summary>
         /// Handles the body index frame data arriving from the sensor
         /// </summary>
