@@ -232,46 +232,37 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
         }
 
-        //TODO - implementar funcionalidades (dependente da interface)
-        //Começa a sessão - implementar
-        private void StartButton_Click(object sender, RoutedEventArgs e)
+               
+        private void Button1_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-        
-        //Guarda gesto
-        //Alterar para ao invés de mudar o conteúdo do botão, chamar outra barra com novos ícones
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
-        {
-            //Button button = sender as Button;
-
-            //if (button.Content.Equals("Gravar"))
-            //{
-            //    button.Content = "Salvar";
-            //}
-            //else
-            //{
-            //    button.Content = "Gravar";
-            //}
-
-
-            //Console.WriteLine("TESTEEEEEEEEE");
+            string Label1 = Button1.Content.ToString(); 
+            if ( Label1.Equals("Gravar") )
+            {
+                Button1.Content = "Efetivar";
+                Button2.Content = "Descartar";
+            }
+            else
+            {
+                Button1.Content = "Gravar";
+                Button2.Content = "Sair";
+            }
         }
 
         //Descarta gesto
-        //Alterar para ao invés de mudar o conteúdo do botão, chamar outra barra com novos ícones
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        private void Button2_Click(object sender, RoutedEventArgs e)
         {
-            //Button button = sender as Button;
+            string Label2 = Button2.Content.ToString();
 
-            //if (button.Content.Equals("Sair"))
-            //{
-            //    button.Content = "Descartar";
-            //}
-            //else
-            //{
-            //    button.Content = "Sair";
-            //}            
+            if (Label2.Equals("Sair"))
+            {
+                //Sair do programa
+            }
+            else
+            {
+                Button1.Content = "Gravar";
+                Button2.Content = "Sair";
+            }
+                   
         }
 
         //Sai e salva todas as instancias guardadas do gesto
@@ -304,6 +295,14 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             }
             
         }
+
+        //TODO - implementar funcionalidades (dependente da interface)
+        //Começa a sessão - implementar
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        
         
         /// <summary>
         /// Handles the body index frame data arriving from the sensor
