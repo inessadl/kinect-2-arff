@@ -8,6 +8,9 @@
         <SolidColorBrush x:Key="MediumGreyBrush" Color="#ff6e6e6e" />
         <SolidColorBrush x:Key="KinectPurpleBrush" Color="#ff52318f" />
         <SolidColorBrush x:Key="KinectBlueBrush" Color="#ff00BCF2" />
+        
+        <SolidColorBrush x:Key="CustomGrey" Color="#FF3A3737" />
+        
         <Style TargetType="{x:Type Image}">
             <Setter Property="SnapsToDevicePixels" Value="True" />
         </Style>
@@ -101,18 +104,19 @@
 
     </Window.Resources>
 
-    <Grid Margin="10 0 10 0" RenderTransformOrigin="0.5,0.5">
+    <Grid Margin="0 0 10 0" RenderTransformOrigin="0.5,0.5" Background="#FF3A3737">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="70" />
+            <RowDefinition Height="6"/>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <DockPanel Grid.Row="0" Margin="0 0 0 20">
-            <TextBlock DockPanel.Dock="Right" Margin="0 0 -1 0" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18">Kinect2Arff</TextBlock>
+        <DockPanel Grid.Row="0" Margin="0 0 0 20" >
+            <TextBlock DockPanel.Dock="Right" Margin="0 0 -1 0" VerticalAlignment="Bottom" Foreground="White" FontFamily="Segoe UI" FontSize="30" HorizontalAlignment="Center">Kinect2Arff</TextBlock>
             <!--<Image Source="Images\Status.png" Stretch="None" HorizontalAlignment="Center" Margin="0 0 0 5" />-->
         </DockPanel>
-        <Viewbox Grid.Row="1" HorizontalAlignment="Center">
+        <Viewbox Grid.Row="1" HorizontalAlignment="Center" Margin="336,0" >
             <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
         </Viewbox>
 
@@ -120,15 +124,15 @@
         <!--<Button Grid.Row="2" Content="Iniciar" Width="100" Height="40"  Margin="535,10,37,10" Click="Button_Click" />
         <Button Grid.Row="2" Content="Encerrar" Width="100" Height="40"  Margin="411,10,161,10" Click="Button_Click" />-->
 
-        <Button x:Name="Button1" Grid.Row="2" Style="{StaticResource SaveButton}" Content="Gravar" Height="50" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,162,16" Click="Button1_Click" Width="90" BorderThickness="1" Background="{DynamicResource MediumGreyBrush}"/>
+        <Button x:Name="Button1" Grid.Row="2" Style="{StaticResource SaveButton}" Content="Gravar" Height="50" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,162,10" Click="Button1_Click" Width="90" BorderThickness="1" Background="{DynamicResource MediumGreyBrush}"/>
 
         <!--<Button x:Name="Button1" Grid.Row="2" Style="{StaticResource ScreenshotButton}" Content="Gravar" Height="Auto" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,196,10" Click="Button1_Click" />-->
-        <Button x:Name="Button2" Grid.Row="2" Style="{StaticResource ExitButton}" Content="Sair" Height="50" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,44,16" Click="Button2_Click" Width="90" />
+        <Button x:Name="Button2" Grid.Row="2" Style="{StaticResource ExitButton}" Content="Sair" Height="50" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,44,10" Click="Button2_Click" Width="90" />
 
         <!--<Button Grid.Row="2" Style="{StaticResource ScreenshotButton}" Content="Screenshot" Height="Auto" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,10,10" Click="ScreenshotButton_Click" />-->
         <!--<Button Grid.Row="2" Style="{DynamicResource ScreenshotButton}" Content="Iniciar Gravação" Height="Auto" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,516,10" Click="ScreenshotButton_Click" Cursor="None" UseLayoutRounding="{DynamicResource {x:Static SystemParameters.FlatMenuKey}}" />-->
 
-        <StatusBar Grid.Row="3" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
+        <StatusBar Grid.Row="4" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="#FF3A3737" Foreground="{StaticResource MediumGreyBrush}">
             <StatusBarItem Content="{Binding StatusText}" />
         </StatusBar>
     </Grid>
