@@ -297,7 +297,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             }
             else
             {
-
+                _recorder.Discard();
                 Button1.Content = "Gravar";
                 Button2.Content = "Sair";
             }

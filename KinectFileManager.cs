@@ -38,10 +38,11 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
              if (body == null || !body.IsTracked) return;
 
              string path = Path.Combine(Folder, _current.ToString() + ".line");
-
-             using (StreamWriter writer = new StreamWriter(path))
+             StreamWriter writer = new StreamWriter(path);
+             StringBuilder line = new StringBuilder();
+             using (writer)
              {
-                 StringBuilder line = new StringBuilder();
+                 //StringBuilder line = new StringBuilder();
 
                  if (!_hasEnumeratedJoints)
                  {
@@ -57,7 +58,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                      {
                          line.Append("X;Y;Z;");
                      }
-                     line.AppendLine();
+                     //line.AppendLine();
 
                      //create an list to save the last joint value in x,y and z axis
                      int i = 0;
@@ -78,6 +79,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
 
                      _hasEnumeratedJoints = true;
+                     _current++;
                  }
                  else
                  {
@@ -117,7 +119,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
                      i = 0;
 
-                     //atualiza a articulação considerada a última
+                     //get the new Joints values
                      foreach (var joint in body.Joints.Values)
                      {
                          _lastJoint[i].Position.X = joint.Position.X;
@@ -126,17 +128,10 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                          i++;
                      }
 
-                     i = 0;
-
-                     foreach (var joint in body.Joints.Values)
-                     {
-                         //line.Append(string.Format("{0};{1};{2};", joint.Position.X, joint.Position.Y, joint.Position.Z)); --essa linha vai para a função de pausa 
-                         line.Append(string.Format("{0};{1};{2};", _sumJoints[i].Position.X, _sumJoints[i].Position.Y, _sumJoints[i].Position.Z));
-                     }
+                    
                  }
                  writer.Write(line);
 
-                 _current++;
              }
          }
 
@@ -166,19 +161,45 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
              }
          }
 
+        //TODO: Verificar por que a flag se mantém true ao invés de se tornar falsa
          public void Pause()
          {
              IsRecording = true;
+             string path = Path.Combine(Folder, _current.ToString() + ".line");
+             StreamWriter writer = new StreamWriter(path);
+             StringBuilder line = new StringBuilder();
+             using (writer)
+             
+             {
+                 for (int i = 0; i < 25; i++ )
+                 {
+                     line.Append(string.Format("{0};{1};{2};", _sumJoints[i].Position.X, _sumJoints[i].Position.Y, _sumJoints[i].Position.Z));
+                 }
+                 _current++;
+                 writer.Write(line);
+             }
          }
 
          public void Continue()
          {
+             for (int i = 0; i < 25; i++)
+             {
+                 _sumJoints[i].Position.X = 0.0f;
+                 _sumJoints[i].Position.Y = 0.0f;
+                 _sumJoints[i].Position.Z = 0.0f;
+             }
              IsRecording = true;
-         }
+          }
 
          public void Discard()
          {
-
+             IsRecording = true;
+             for (int i = 0; i < 25; i++)
+             {
+                 _sumJoints[i].Position.X = 0.0f;
+                 _sumJoints[i].Position.Y = 0.0f;
+                 _sumJoints[i].Position.Z = 0.0f;
+             }
          }
 
     }
