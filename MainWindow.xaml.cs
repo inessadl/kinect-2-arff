@@ -22,7 +22,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
     using System.Windows.Input;
     using System.Windows.Navigation;
 
-
+    //Beta 
 
 
     /// <summary>

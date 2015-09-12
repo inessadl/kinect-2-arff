@@ -9,6 +9,7 @@ using System.IO;
 
 namespace Microsoft.Samples.Kinect.BodyIndexBasics
 {
+    //Beta 
     class KinectFileManager
     {
     ﻿    int _current = 0;
