@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Microsoft.Kinect;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Kinect;
-using System.IO;
 
-namespace Microsoft.Samples.Kinect.BodyIndexBasics
-{
-    class KinectFileManager
+
+    public class KinectFileManager
     {
-    ﻿    int _current = 0; 
+        int _current = 0;
+
         bool _hasEnumeratedJoints = false;
 
         public bool IsRecording { get; protected set; }
@@ -21,11 +21,10 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
         public void Start()
         {
+            IsRecording = true;
             Folder = DateTime.Now.ToString("yyy_MM_dd_HH_mm_ss");
 
             Directory.CreateDirectory(Folder);
-
-            IsRecording = true;
         }
 
         public void Update(Body body)
@@ -70,6 +69,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         public void Stop()
         {
             IsRecording = false;
+            _hasEnumeratedJoints = false;
+
             Result = DateTime.Now.ToString("yyy_MM_dd_HH_mm_ss") + ".csv";
 
             using (StreamWriter writer = new StreamWriter(Result))
@@ -91,16 +92,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                     }
                 }
             }
-        }
 
-        public void Pause()
-        {
-            IsRecording = true;
-        }
-
-        public void Continue()
-        {
-            IsRecording = true;
+            Directory.Delete(Folder, true);
         }
     }
 }

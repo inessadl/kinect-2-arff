@@ -13,11 +13,15 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
-    //using System.Windows.Forms;
     using System.Windows.Controls;
-    //using System.Windows.Forms.Button;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Data;
+    using System.Windows.Documents;
+    using System.Windows.Input;
+    using System.Windows.Navigation;
 
-    
 
 
 
@@ -45,7 +49,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             0xFF808000,
         };
 
-   
+
 
         /// <summary>
         /// Active Kinect sensor
@@ -83,6 +87,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         KinectFileManager _recorder = null;
         BodyFrameReader _reader = null;
         IList<Body> _bodies = null;
+        bool _firstFrame = true;
 
 
         /// <summary>
@@ -113,6 +118,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             // open the sensor
             this.kinectSensor.Open();
 
+
+
             // set the status text
             this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                             : Properties.Resources.NoSensorStatusText;
@@ -123,6 +130,20 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             // initialize the components (controls) of the window
             this.InitializeComponent();
 
+            kinectSensor = KinectSensor.GetDefault();
+
+            //TODO: Quando a tela inicial estiver pronta apagar isso e chamar a tela inicial - Window_Loaded
+            if (kinectSensor != null)
+            {
+                kinectSensor.Open();
+
+                _bodies = new Body[kinectSensor.BodyFrameSource.BodyCount];
+
+                _reader = kinectSensor.BodyFrameSource.OpenReader();
+                _reader.FrameArrived += BodyReader_FrameArrived;
+
+                _recorder = new KinectFileManager();
+            }
 
 
         }
@@ -177,6 +198,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         {
             if (this.bodyIndexFrameReader != null)
             {
+                Exit_Click();
+
                 // remove the event handler
                 this.bodyIndexFrameReader.FrameArrived -= this.Reader_FrameArrived;
 
@@ -184,6 +207,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                 this.bodyIndexFrameReader.Dispose();
                 this.bodyIndexFrameReader = null;
             }
+
 
         }
 
@@ -194,9 +218,9 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// <param name="e">event arguments</param>
         private void ScreenshotButton_Click(object sender, RoutedEventArgs e)
         {
-           // Button button = sender as Button;
+            // Button button = sender as Button;
 
-            
+
             if (this.bodyIndexBitmap != null)
             {
                 // create a png bitmap encoder which knows how to save a .png file
@@ -228,82 +252,81 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                 }
             }
 
-           // button.Content = "Teste";
+            // button.Content = "Teste";
 
         }
 
-               
+
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
-            string Label1 = Button1.Content.ToString(); 
-            if ( Label1.Equals("Gravar") )
+            string Label1 = Button1.Content.ToString();
+            if (Label1.Equals("Gravar"))
             {
                 Button1.Content = "Efetivar";
                 Button2.Content = "Descartar";
+
+                if (_firstFrame)
+                {
+                    _firstFrame = false;
+                    _recorder.Start();
+                }
+                else
+                {
+                    _recorder.Continue();
+                }
             }
             else
             {
+                _recorder.Pause();
                 Button1.Content = "Gravar";
                 Button2.Content = "Sair";
+
             }
         }
 
-        //Descarta gesto
+
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
             string Label2 = Button2.Content.ToString();
 
             if (Label2.Equals("Sair"))
             {
-                //Sair do programa
+                Exit_Click();
             }
             else
             {
+
                 Button1.Content = "Gravar";
                 Button2.Content = "Sair";
             }
-                   
+
         }
 
-        //Sai e salva todas as instancias guardadas do gesto
         //TODO - Trocar para formato Arff
-        private void ExitButton_Click(object sender, RoutedEventArgs e)
-        {
-            _recorder.Stop();
+        //TODO - Voltar para a tela inicial
+        private void Exit_Click() {
 
-            //Trocar mudar o conteúdo por voltar para a tela inicial do programa
-            //button.Content = "Start";
-
-            //Save File
-            SaveFileDialog dialog = new SaveFileDialog
+            if (_recorder.IsRecording)
             {
-                Filter = "Excel files|*.csv"
-            };
+                _recorder.Stop();
 
-            dialog.ShowDialog();
 
-            if (!string.IsNullOrWhiteSpace(dialog.FileName))
-            {
-                System.IO.File.Copy(_recorder.Result, dialog.FileName);
+                SaveFileDialog dialog = new SaveFileDialog
+                {
+                    Filter = "Excel files|*.csv"
+                };
+
+                dialog.ShowDialog();
+
+                if (!string.IsNullOrWhiteSpace(dialog.FileName))
+                {
+                    System.IO.File.Copy(_recorder.Result, dialog.FileName);
+                }
             }
 
-            //Close kinect
-            if (this.kinectSensor != null)
-            {
-                this.kinectSensor.Close();
-                this.kinectSensor = null;
-            }
-            
         }
 
-        //TODO - implementar funcionalidades (dependente da interface)
-        //Começa a sessão - implementar
-        private void StartButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        
-        
+     
         /// <summary>
         /// Handles the body index frame data arriving from the sensor
         /// </summary>
@@ -392,6 +415,43 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             // on failure, set the status text
             this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                             : Properties.Resources.SensorNotAvailableStatusText;
+        }
+
+
+        //chamar função na tela inicial para instanciar objetos (ligar o kinect)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            kinectSensor = KinectSensor.GetDefault();
+
+            if (kinectSensor != null)
+            {
+                kinectSensor.Open();
+
+                _bodies = new Body[kinectSensor.BodyFrameSource.BodyCount];
+
+                _reader = kinectSensor.BodyFrameSource.OpenReader();
+                _reader.FrameArrived += BodyReader_FrameArrived;
+
+                _recorder = new KinectFileManager();
+            }
+        }
+
+        void BodyReader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
+        {
+            using (var frame = e.FrameReference.AcquireFrame())
+            {
+                if (frame != null)
+                {
+                    frame.GetAndRefreshBodyData(_bodies);
+
+                    Body body = _bodies.Where(b => b != null && b.IsTracked).FirstOrDefault();
+
+                    if (body != null)
+                    {
+                        _recorder.Update(body);
+                    }
+                }
+            }
         }
     }
 }
