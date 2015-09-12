@@ -39,14 +39,16 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// Collection of colors to be used to display the BodyIndexFrame data.
         /// </summary>
         /// TODO: Trocar isso por vermelho para inválido e verde para válido (talvez uma outra cor para gravando)
+        /// TODO: Verificar problema de não inicializar com qualquer cor
         private static readonly uint[] BodyColor =
         {
             0x0000FF00,
-            0x00FF0000,
-            0xFFFF4000,
-            0x40FFFF00,
-            0xFF40FF00,
-            0xFF808000,
+            0x0000FF00,
+            0x0000FF00,
+            0x0000FF00,
+            0x0000FF00,
+            0x0000FF00,
+            //0x00FF0000,
         };
 
 
@@ -54,32 +56,32 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// <summary>
         /// Active Kinect sensor
         /// </summary>
-        private KinectSensor kinectSensor = null;
+        private KinectSensor _kinectSensor = null;
 
         /// <summary>
         /// Reader for body index frames
         /// </summary>
-        private BodyIndexFrameReader bodyIndexFrameReader = null;
+        private BodyIndexFrameReader _bodyIndexFrameReader = null;
 
         /// <summary>
         /// Description of the data contained in the body index frame
         /// </summary>
-        private FrameDescription bodyIndexFrameDescription = null;
+        private FrameDescription _bodyIndexFrameDescription = null;
 
         /// <summary>
         /// Bitmap to display
         /// </summary>
-        private WriteableBitmap bodyIndexBitmap = null;
+        private WriteableBitmap _bodyIndexBitmap = null;
 
         /// <summary>
         /// Intermediate storage for frame data converted to color
         /// </summary>
-        private uint[] bodyIndexPixels = null;
+        private uint[] _bodyIndexPixels = null;
 
         /// <summary>
         /// Current status text to display
         /// </summary>
-        private string statusText = null;
+        private string _statusText = null;
 
         /// <sumarry>
         /// Buffer to save data
@@ -95,33 +97,33 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// </summary>
         public MainWindow()
         {
-            // get the kinectSensor object
-            this.kinectSensor = KinectSensor.GetDefault();
+            // get the _kinectSensor object
+            this._kinectSensor = KinectSensor.GetDefault();
 
             // open the reader for the depth frames
-            this.bodyIndexFrameReader = this.kinectSensor.BodyIndexFrameSource.OpenReader();
+            this._bodyIndexFrameReader = this._kinectSensor.BodyIndexFrameSource.OpenReader();
 
             // wire handler for frame arrival
-            this.bodyIndexFrameReader.FrameArrived += this.Reader_FrameArrived;
+            this._bodyIndexFrameReader.FrameArrived += this.Reader_FrameArrived;
 
-            this.bodyIndexFrameDescription = this.kinectSensor.BodyIndexFrameSource.FrameDescription;
+            this._bodyIndexFrameDescription = this._kinectSensor.BodyIndexFrameSource.FrameDescription;
 
             // allocate space to put the pixels being converted
-            this.bodyIndexPixels = new uint[this.bodyIndexFrameDescription.Width * this.bodyIndexFrameDescription.Height];
+            this._bodyIndexPixels = new uint[this._bodyIndexFrameDescription.Width * this._bodyIndexFrameDescription.Height];
 
             // create the bitmap to display
-            this.bodyIndexBitmap = new WriteableBitmap(this.bodyIndexFrameDescription.Width, this.bodyIndexFrameDescription.Height, 96.0, 96.0, PixelFormats.Bgr32, null);
+            this._bodyIndexBitmap = new WriteableBitmap(this._bodyIndexFrameDescription.Width, this._bodyIndexFrameDescription.Height, 96.0, 96.0, PixelFormats.Bgr32, null);
 
             // set IsAvailableChanged event notifier
-            this.kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged;
+            this._kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged;
 
             // open the sensor
-            this.kinectSensor.Open();
+            this._kinectSensor.Open();
 
 
 
             // set the status text
-            this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
+            this.StatusText = this._kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                             : Properties.Resources.NoSensorStatusText;
 
             // use the window object as the view model in this simple example
@@ -130,16 +132,16 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             // initialize the components (controls) of the window
             this.InitializeComponent();
 
-            kinectSensor = KinectSensor.GetDefault();
+            _kinectSensor = KinectSensor.GetDefault();
 
             //TODO: Quando a tela inicial estiver pronta apagar isso e chamar a tela inicial - Window_Loaded
-            if (kinectSensor != null)
+            if (_kinectSensor != null)
             {
-                kinectSensor.Open();
+                _kinectSensor.Open();
 
-                _bodies = new Body[kinectSensor.BodyFrameSource.BodyCount];
+                _bodies = new Body[_kinectSensor.BodyFrameSource.BodyCount];
 
-                _reader = kinectSensor.BodyFrameSource.OpenReader();
+                _reader = _kinectSensor.BodyFrameSource.OpenReader();
                 _reader.FrameArrived += BodyReader_FrameArrived;
 
                 _recorder = new KinectFileManager();
@@ -160,7 +162,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         {
             get
             {
-                return this.bodyIndexBitmap;
+                return this._bodyIndexBitmap;
             }
         }
 
@@ -171,14 +173,14 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         {
             get
             {
-                return this.statusText;
+                return this._statusText;
             }
 
             set
             {
-                if (this.statusText != value)
+                if (this._statusText != value)
                 {
-                    this.statusText = value;
+                    this._statusText = value;
 
                     // notify any bound elements that the text has changed
                     if (this.PropertyChanged != null)
@@ -196,16 +198,16 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// <param name="e">event arguments</param>
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (this.bodyIndexFrameReader != null)
+            if (this._bodyIndexFrameReader != null)
             {
                 Exit_Click();
 
                 // remove the event handler
-                this.bodyIndexFrameReader.FrameArrived -= this.Reader_FrameArrived;
+                this._bodyIndexFrameReader.FrameArrived -= this.Reader_FrameArrived;
 
                 // BodyIndexFrameReder is IDisposable
-                this.bodyIndexFrameReader.Dispose();
-                this.bodyIndexFrameReader = null;
+                this._bodyIndexFrameReader.Dispose();
+                this._bodyIndexFrameReader = null;
             }
 
 
@@ -221,13 +223,13 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             // Button button = sender as Button;
 
 
-            if (this.bodyIndexBitmap != null)
+            if (this._bodyIndexBitmap != null)
             {
                 // create a png bitmap encoder which knows how to save a .png file
                 BitmapEncoder encoder = new PngBitmapEncoder();
 
                 // create frame from the writable bitmap and add to encoder
-                encoder.Frames.Add(BitmapFrame.Create(this.bodyIndexBitmap));
+                encoder.Frames.Add(BitmapFrame.Create(this._bodyIndexBitmap));
 
                 string time = System.DateTime.UtcNow.ToString("hh'-'mm'-'ss", CultureInfo.CurrentUICulture.DateTimeFormat);
 
@@ -345,8 +347,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                     using (Microsoft.Kinect.KinectBuffer bodyIndexBuffer = bodyIndexFrame.LockImageBuffer())
                     {
                         // verify data and write the color data to the display bitmap
-                        if (((this.bodyIndexFrameDescription.Width * this.bodyIndexFrameDescription.Height) == bodyIndexBuffer.Size) &&
-                            (this.bodyIndexFrameDescription.Width == this.bodyIndexBitmap.PixelWidth) && (this.bodyIndexFrameDescription.Height == this.bodyIndexBitmap.PixelHeight))
+                        if (((this._bodyIndexFrameDescription.Width * this._bodyIndexFrameDescription.Height) == bodyIndexBuffer.Size) &&
+                            (this._bodyIndexFrameDescription.Width == this._bodyIndexBitmap.PixelWidth) && (this._bodyIndexFrameDescription.Height == this._bodyIndexBitmap.PixelHeight))
                         {
                             this.ProcessBodyIndexFrameData(bodyIndexBuffer.UnderlyingBuffer, bodyIndexBuffer.Size);
                             bodyIndexFrameProcessed = true;
@@ -382,13 +384,13 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                 {
                     // this pixel is part of a player,
                     // display the appropriate color
-                    this.bodyIndexPixels[i] = BodyColor[frameData[i]];
+                    this._bodyIndexPixels[i] = BodyColor[frameData[i]];
                 }
                 else
                 {
                     // this pixel is not part of a player
                     // display black
-                    this.bodyIndexPixels[i] = 0x00000000;
+                    this._bodyIndexPixels[i] = 0x00000000;
                 }
             }
         }
@@ -398,10 +400,10 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// </summary>
         private void RenderBodyIndexPixels()
         {
-            this.bodyIndexBitmap.WritePixels(
-                new Int32Rect(0, 0, this.bodyIndexBitmap.PixelWidth, this.bodyIndexBitmap.PixelHeight),
-                this.bodyIndexPixels,
-                this.bodyIndexBitmap.PixelWidth * (int)BytesPerPixel,
+            this._bodyIndexBitmap.WritePixels(
+                new Int32Rect(0, 0, this._bodyIndexBitmap.PixelWidth, this._bodyIndexBitmap.PixelHeight),
+                this._bodyIndexPixels,
+                this._bodyIndexBitmap.PixelWidth * (int)BytesPerPixel,
                 0);
         }
 
@@ -413,7 +415,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         private void Sensor_IsAvailableChanged(object sender, IsAvailableChangedEventArgs e)
         {
             // on failure, set the status text
-            this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
+            this.StatusText = this._kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                             : Properties.Resources.SensorNotAvailableStatusText;
         }
 
@@ -421,15 +423,15 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         //chamar função na tela inicial para instanciar objetos (ligar o kinect)
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            kinectSensor = KinectSensor.GetDefault();
+            _kinectSensor = KinectSensor.GetDefault();
 
-            if (kinectSensor != null)
+            if (_kinectSensor != null)
             {
-                kinectSensor.Open();
+                _kinectSensor.Open();
 
-                _bodies = new Body[kinectSensor.BodyFrameSource.BodyCount];
+                _bodies = new Body[_kinectSensor.BodyFrameSource.BodyCount];
 
-                _reader = kinectSensor.BodyFrameSource.OpenReader();
+                _reader = _kinectSensor.BodyFrameSource.OpenReader();
                 _reader.FrameArrived += BodyReader_FrameArrived;
 
                 _recorder = new KinectFileManager();
