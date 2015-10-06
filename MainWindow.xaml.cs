@@ -315,7 +315,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
                 SaveFileDialog dialog = new SaveFileDialog
                 {
-                    Filter = "Excel files|*.csv"
+                    Filter = "WEKA files|*.arff"
                 };
 
                 dialog.ShowDialog();

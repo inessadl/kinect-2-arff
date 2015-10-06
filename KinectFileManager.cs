@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using Microsoft.Kinect;
 using System.Windows.Media.Media3D;
 using System.IO;
+using System.Globalization;
+
 
 namespace Microsoft.Samples.Kinect.BodyIndexBasics
-{
-    //Beta 
+{ 
     class KinectFileManager
     {
-    ﻿    int _current = 0;
+         int _current = 0;
          bool _hasEnumeratedJoints = false;
 
          Joint[] _lastJoint = new Joint[25]; //create an array to save the last Joint position in x,y, and z axis
@@ -35,6 +36,11 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
          public void Update(Body body)
          {
+             //Changes the system to dot instead comma because WEKA only suports dot in real values 
+             System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+             customCulture.NumberFormat.NumberDecimalSeparator = ".";
+             System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+
              if (!IsRecording) return;
              if (body == null || !body.IsTracked) return;
 
@@ -43,25 +49,28 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
              StringBuilder line = new StringBuilder();
              using (writer)
              {
-                 //StringBuilder line = new StringBuilder();
+                 //TODO: change word gesto to moviment name
+                 line.Append("@RELATION gesto");
+                 line.AppendLine();
 
                  if (!_hasEnumeratedJoints)
                  {
                      //add the headers to a file
                      foreach (var joint in body.Joints.Values)
                      {
-                         line.Append(string.Format("{0};;;", joint.JointType.ToString()));
+                         line.Append(string.Format("@ATTRIBUTE {0}X", joint.JointType.ToString()));
+                         line.Append(string.Format("  NUMERIC"));
+                         line.AppendLine();
+                         line.Append(string.Format("@ATTRIBUTE {0}Y", joint.JointType.ToString()));
+                         line.Append(string.Format("  NUMERIC"));
+                         line.AppendLine();
+                         line.Append(string.Format("@ATTRIBUTE {0}Z", joint.JointType.ToString()));
+                         line.Append(string.Format("  NUMERIC"));
+                         line.AppendLine();
                      }
+                     line.Append("@DATA");
                      line.AppendLine();
 
-                     //add the headers to a file
-                     foreach (var joint in body.Joints.Values)
-                     {
-                         line.Append("X;Y;Z;");
-                     }
-                     //line.AppendLine();
-
-                     //create an list to save the last joint value in x,y and z axis
                      int i = 0;
                      foreach (var joint in body.Joints.Values)
                      {
@@ -70,7 +79,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
                      i = 0;
 
-                     //initialize array with zero in Position values
+                     //init array with zero in Position values
                      foreach (var joint in _sumJoints)
                      {
                          _sumJoints[i].Position.X = 0.0f;
@@ -139,7 +148,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
          public void Stop()
          {
              IsRecording = false;
-             Result = DateTime.Now.ToString("yyy_MM_dd_HH_mm_ss") + ".csv";
+             Result = DateTime.Now.ToString("yyy_MM_dd_HH_mm_ss") + ".arff";
 
              using (StreamWriter writer = new StreamWriter(Result))
              {
@@ -174,7 +183,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
              {
                  for (int i = 0; i < 25; i++ )
                  {
-                     line.Append(string.Format("{0};{1};{2};", _sumJoints[i].Position.X, _sumJoints[i].Position.Y, _sumJoints[i].Position.Z));
+                     line.Append(string.Format("{0},{1},{2},", _sumJoints[i].Position.X, _sumJoints[i].Position.Y, _sumJoints[i].Position.Z));
                  }
                  _current++;
                  writer.Write(line);
