@@ -10,33 +10,25 @@ using System.Globalization;
 
 
 namespace Microsoft.Samples.Kinect.BodyIndexBasics
-{ 
+{
     class KinectFileManager
     {
-         int _current = 0;
-         bool _hasEnumeratedJoints = false;
-
          Joint[] _lastJoint = new Joint[25]; //create an array to save the last Joint position in x,y, and z axis
          Joint[] _sumJoints = new Joint[25]; //create an array to save the sum Joint position in x,y, and z axis
 
-         public bool IsRecording { get; protected set; }
+         public bool IsRecording { get; protected set; } //Record status
 
-         public string Folder { get; protected set; }
+         public string Folder { get; protected set; } //Folder name
 
-         public string Result { get; protected set; }
+         public string Result { get; protected set; } //Final stream/file name
 
-         public void Start()
-         {
-             Folder = DateTime.Now.ToString("yyy_MM_dd_HH_mm_ss");
+         private bool HasListedtedJoints { get; protected set; } //Flag used to writte header file
 
-             Directory.CreateDirectory(Folder);
-
-             IsRecording = true;
-         }
+         private int StreamLineNumber { get; protected set; } //File line that will set stream buffer
 
          public void Update(Body body)
          {
-             //Changes the system to dot instead comma because WEKA only suports dot in real values 
+             //Changes the system to dot instead comma because WEKA only suports dot in real values
              System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
              customCulture.NumberFormat.NumberDecimalSeparator = ".";
              System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
@@ -44,7 +36,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
              if (!IsRecording) return;
              if (body == null || !body.IsTracked) return;
 
-             string path = Path.Combine(Folder, _current.ToString() + ".line");
+             string path = Path.Combine(Folder, StreamLineNumber.ToString() + ".line");
+             int i = 0;
              StreamWriter writer = new StreamWriter(path);
              StringBuilder line = new StringBuilder();
              using (writer)
@@ -53,7 +46,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                  line.Append("@RELATION gesto");
                  line.AppendLine();
 
-                 if (!_hasEnumeratedJoints)
+                 if (!HasListedtedJoints)
                  {
                      //add the headers to a file
                      foreach (var joint in body.Joints.Values)
@@ -71,7 +64,6 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                      line.Append("@DATA");
                      line.AppendLine();
 
-                     int i = 0;
                      foreach (var joint in body.Joints.Values)
                      {
                          _lastJoint[i++] = joint;
@@ -88,14 +80,13 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                      }
 
 
-                     _hasEnumeratedJoints = true;
-                     _current++;
+                     HasListedtedJoints = true;
+                     StreamLineNumber++;
                  }
                  else
                  {
-                     int i = 0;
-
-                     //module calculate to Position Joints
+                     i = 0;
+                     //calculate the Joints Positions module
                      foreach (var joint in body.Joints.Values)
                      {
                          if (joint.Position.X > _lastJoint[i].Position.X)
@@ -138,13 +129,25 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                          i++;
                      }
 
-                    
+
                  }
-                 writer.Write(line);
+                 writer.Write(line); //set the stream with all get values
 
              }
          }
 
+         //Init all values
+         public void Start()
+         {
+             Folder = DateTime.Now.ToString("yyy_MM_dd_HH_mm_ss");
+             Directory.CreateDirectory(Folder);
+             IsRecording = true;
+             HasListedtedJoints = false;
+             StreamLineNumber = 0;
+         }
+
+         //Save all stream values in a file
+         //while was the index value less than StreamLineNumber
          public void Stop()
          {
              IsRecording = false;
@@ -152,7 +155,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
              using (StreamWriter writer = new StreamWriter(Result))
              {
-                 for (int index = 0; index < _current; index++)
+                 for (int index = 0; index < StreamLineNumber; index++)
                  {
                      string path = Path.Combine(Folder, index.ToString() + ".line");
 
@@ -171,25 +174,27 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
              }
          }
 
-        //TODO: Verificar por que a flag se mantém true ao invés de se tornar falsa
+         //Add new gesture values in current stream
+         //All values corresponding one gesture stay on the same line
          public void Pause()
          {
              IsRecording = true;
-             string path = Path.Combine(Folder, _current.ToString() + ".line");
+             string path = Path.Combine(Folder, StreamLineNumber.ToString() + ".line");
              StreamWriter writer = new StreamWriter(path);
              StringBuilder line = new StringBuilder();
              using (writer)
-             
+
              {
                  for (int i = 0; i < 25; i++ )
                  {
                      line.Append(string.Format("{0},{1},{2},", _sumJoints[i].Position.X, _sumJoints[i].Position.Y, _sumJoints[i].Position.Z));
                  }
-                 _current++;
+                 StreamLineNumber++;
                  writer.Write(line);
              }
          }
 
+         //Reset all values to get a new gesture
          public void Continue()
          {
              for (int i = 0; i < 25; i++)
@@ -201,8 +206,9 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
              IsRecording = true;
           }
 
+         //Reset all values
          public void Discard()
-         {
+           {
              IsRecording = true;
              for (int i = 0; i < 25; i++)
              {
