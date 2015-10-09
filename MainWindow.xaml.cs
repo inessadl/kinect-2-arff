@@ -22,7 +22,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
     using System.Windows.Input;
     using System.Windows.Navigation;
 
-    //Beta 
+    //Beta
 
 
     /// <summary>
@@ -38,7 +38,6 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         /// <summary>
         /// Collection of colors to be used to display the BodyIndexFrame data.
         /// </summary>
-        /// TODO: Trocar isso por vermelho para inválido e verde para válido (talvez uma outra cor para gravando)
         /// TODO: Verificar problema de não inicializar com qualquer cor
         private static readonly uint[] BodyColor =
         {
@@ -134,7 +133,6 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
             _kinectSensor = KinectSensor.GetDefault();
 
-            //TODO: Quando a tela inicial estiver pronta apagar isso e chamar a tela inicial - Window_Loaded
             if (_kinectSensor != null)
             {
                 _kinectSensor.Open();
@@ -213,52 +211,6 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
         }
 
-        /// <summary>
-        /// Handles the user clicking on the screenshot button
-        /// </summary>
-        /// <param name="sender">object sending the event</param>
-        /// <param name="e">event arguments</param>
-        private void ScreenshotButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Button button = sender as Button;
-
-
-            if (this._bodyIndexBitmap != null)
-            {
-                // create a png bitmap encoder which knows how to save a .png file
-                BitmapEncoder encoder = new PngBitmapEncoder();
-
-                // create frame from the writable bitmap and add to encoder
-                encoder.Frames.Add(BitmapFrame.Create(this._bodyIndexBitmap));
-
-                string time = System.DateTime.UtcNow.ToString("hh'-'mm'-'ss", CultureInfo.CurrentUICulture.DateTimeFormat);
-
-                string myPhotos = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-
-                string path = Path.Combine(myPhotos, "KinectScreenshot-BodyIndex-" + time + ".png");
-
-                // write the new file to disk
-                try
-                {
-                    // FileStream is IDisposable
-                    using (FileStream fs = new FileStream(path, FileMode.Create))
-                    {
-                        encoder.Save(fs);
-                    }
-
-                    this.StatusText = string.Format(CultureInfo.CurrentCulture, Properties.Resources.SavedScreenshotStatusTextFormat, path);
-                }
-                catch (IOException)
-                {
-                    this.StatusText = string.Format(CultureInfo.CurrentCulture, Properties.Resources.FailedScreenshotStatusTextFormat, path);
-                }
-            }
-
-            // button.Content = "Teste";
-
-        }
-
-
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
             string Label1 = Button1.Content.ToString();
@@ -304,7 +256,6 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
         }
 
-        //TODO - Trocar para formato Arff
         //TODO - Voltar para a tela inicial
         private void Exit_Click() {
 
@@ -328,7 +279,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
         }
 
-     
+
         /// <summary>
         /// Handles the body index frame data arriving from the sensor
         /// </summary>
@@ -342,7 +293,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             {
                 if (bodyIndexFrame != null)
                 {
-                    // the fastest way to process the body index data is to directly access 
+                    // the fastest way to process the body index data is to directly access
                     // the underlying buffer
                     using (Microsoft.Kinect.KinectBuffer bodyIndexBuffer = bodyIndexFrame.LockImageBuffer())
                     {
@@ -364,7 +315,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         }
 
         /// <summary>
-        /// Directly accesses the underlying image buffer of the BodyIndexFrame to 
+        /// Directly accesses the underlying image buffer of the BodyIndexFrame to
         /// create a displayable bitmap.
         /// This function requires the /unsafe compiler option as we make use of direct
         /// access to the native memory pointed to by the bodyIndexFrameData pointer.
