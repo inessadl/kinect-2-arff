@@ -22,9 +22,9 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
          public string Result { get; protected set; } //Final stream/file name
 
-         private bool HasListedtedJoints { get; protected set; } //Flag used to writte header file
+         private bool HasListedJoints { get; set; } //Flag used to writte header file
 
-         private int StreamLineNumber { get; protected set; } //File line that will set stream buffer
+         private int StreamLineNumber { get; set; } //File line that will set stream buffer
 
          public void Update(Body body)
          {
@@ -46,7 +46,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                  line.Append("@RELATION gesto");
                  line.AppendLine();
 
-                 if (!HasListedtedJoints)
+                 if (!HasListedJoints)
                  {
                      //add the headers to a file
                      foreach (var joint in body.Joints.Values)
@@ -80,7 +80,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                      }
 
 
-                     HasListedtedJoints = true;
+                     HasListedJoints = true;
                      StreamLineNumber++;
                  }
                  else
@@ -142,7 +142,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
              Folder = DateTime.Now.ToString("yyy_MM_dd_HH_mm_ss");
              Directory.CreateDirectory(Folder);
              IsRecording = true;
-             HasListedtedJoints = false;
+             HasListedJoints = false;
              StreamLineNumber = 0;
          }
 
