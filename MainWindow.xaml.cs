@@ -21,7 +21,6 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
     using System.Windows.Documents;
     using System.Windows.Input;
     using System.Windows.Navigation;
-    using LightBuzz.Vitruvius;
 
     //Beta
 
@@ -217,8 +216,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             string Label1 = Button1.Content.ToString();
             if (Label1.Equals("Gravar"))
             {
-                Button1.Content = "Salvar";
-                Button2.Content = "Cancelar";
+                Button1.Content = "Efetivar";
+                Button2.Content = "Descartar";
 
                 if (_firstFrame)
                 {
