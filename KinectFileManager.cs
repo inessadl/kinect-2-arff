@@ -22,9 +22,9 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
          public string Result { get; protected set; } //Final stream/file name
 
-         private bool HasListedtedJoints { get; protected set; } //Flag used to writte header file
+         private bool HasListedtedJoints { get; set; } //Flag used to writte header file
 
-         private int StreamLineNumber { get; protected set; } //File line that will set stream buffer
+         private int StreamLineNumber { get; set; } //File line that will set stream buffer
 
          public void Update(Body body)
          {
