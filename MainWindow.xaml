@@ -61,20 +61,23 @@
                 <LineBreak /> (if you just see part of it, the record will not
                 <LineBreak /> work properly).
                 <LineBreak />
-                <LineBreak /> Press "Gravar" to start record a gesture.
+                <LineBreak /> Press "Record" to start record a gesture.
                 <LineBreak /> 
-                <LineBreak /> Press "Salvar" to generate an Arff file with
-                <LineBreak /> the data, or "Descartar" to start over.
+                <LineBreak /> Press "Save" to generate an Arff file with the
+                <LineBreak /> data, or "Back" to start over.
+                <LineBreak />
+                <LineBreak />
+                <LineBreak /> *the "Exit" button will work after the recording.
             </TextBlock>
 
             <!-- ====== Buttons ====== -->
             <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom">
                 
                 <Button x:Name="Button1" Grid.Row="1" Grid.Column="1" Style="{StaticResource SmallButton}" 
-                        Content="Gravar" Margin="40, -240, 0, 0" Click="Button1_Click" />
+                        Content="Record" Margin="40, -240, 0, 0" Click="Button1_Click" />
 
                 <Button x:Name="Button2" Grid.Row="0" Grid.Column="1" Style="{StaticResource SmallButton}" 
-                        Content="Sair" Margin="40, -240, 0, 0" Click="Button2_Click" />
+                        Content="Exit" Margin="40, -240, 0, 0" Click="Button2_Click" />
                 
             </TextBlock>
 

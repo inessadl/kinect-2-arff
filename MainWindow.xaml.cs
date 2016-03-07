@@ -214,10 +214,10 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
             string Label1 = Button1.Content.ToString();
-            if (Label1.Equals("Gravar"))
+            if (Label1.Equals("Record"))
             {
-                Button1.Content = "Salvar";
-                Button2.Content = "Descartar";
+                Button1.Content = "Save";
+                Button2.Content = "Back";
 
                 if (_firstFrame)
                 {
@@ -232,8 +232,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             else
             {
                 _recorder.Pause();
-                Button1.Content = "Gravar";
-                Button2.Content = "Sair";
+                Button1.Content = "Record";
+                Button2.Content = "Exit";
 
             }
         }
@@ -243,15 +243,15 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         {
             string Label2 = Button2.Content.ToString();
 
-            if (Label2.Equals("Sair"))
+            if (Label2.Equals("Exit"))
             {
                 Exit_Click();
             }
             else
             {
                 _recorder.Discard();
-                Button1.Content = "Gravar";
-                Button2.Content = "Sair";
+                Button1.Content = "Record";
+                Button2.Content = "Exit";
             }
 
         }
