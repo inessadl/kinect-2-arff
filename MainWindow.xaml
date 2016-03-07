@@ -2,19 +2,15 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Kinect2Arff" 
-        Height="600" Width="700"
         WindowState="Maximized"
         Closing="MainWindow_Closing"
-        >
-    
-    <!--<Window.Resources>
-        <SolidColorBrush x:Key="MediumGreyBrush" Color="#ff6e6e6e" />
-        <SolidColorBrush x:Key="KinectPurpleBrush" Color="#ff52318f" />
-        <SolidColorBrush x:Key="KinectBlueBrush" Color="#ff00BCF2" />
+        ResizeMode="NoResize">
+
+    <Window.Resources>
         <Style TargetType="{x:Type Image}">
             <Setter Property="SnapsToDevicePixels" Value="True" />
         </Style>
-    </Window.Resources>-->
+    </Window.Resources>
 
 
     <Grid >
@@ -38,11 +34,12 @@
 
             <!-- ====== Main content: Kinect camera view ====== -->
             <Viewbox Grid.Row="0" Grid.Column="0" 
-                 HorizontalAlignment="Left" Margin="120 80 0 80">
+                 HorizontalAlignment="Left" Margin="140 80 0 80">
                 <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
             </Viewbox>
 
 
+            <!-- ====== Header ====== -->
             <DockPanel Grid.Row="0" Grid.Column="1" Margin="40 60 0 0" >
                 <TextBlock Style="{StaticResource HeaderTextBlockStyle}">
                     <Bold Foreground="#FF387F37" >
@@ -51,46 +48,40 @@
                 </TextBlock>
             </DockPanel>
 
-
+            
+            <!-- ====== Instructions text ====== -->
             <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource SubheaderTextBlockStyle}" Margin="40 180 0 0">
                 <Bold Foreground="Gray" FontSize="32">
                         <Run Text="Instructions:" />
                 </Bold>
             </TextBlock>
-            
-            <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource SubheaderTextBlockStyle}" Margin="40 200 0 0" >
-  
-                <!--<LineBreak />-->
-                
+
+            <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource SubheaderTextBlockStyle}" Margin="40 200 0 0" >         
                 <LineBreak /> Make sure Kinect is tracking your entire body 
-                <LineBreak /> (if you just see part of it, the record will
-                <LineBreak /> not work properly).
+                <LineBreak /> (if you just see part of it, the record will not
+                <LineBreak /> work properly).
                 <LineBreak />
                 <LineBreak /> Press "Gravar" to start record a gesture.
                 <LineBreak /> 
                 <LineBreak /> Press "Salvar" to generate an Arff file with
                 <LineBreak /> the data, or "Descartar" to start over.
-               
-
             </TextBlock>
 
+            <!-- ====== Buttons ====== -->
             <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom">
-                <!-- ====== Buttons ====== -->
+                
                 <Button x:Name="Button1" Grid.Row="1" Grid.Column="1" Style="{StaticResource SmallButton}" 
                         Content="Gravar" Margin="40, -240, 0, 0" Click="Button1_Click" />
 
-
                 <Button x:Name="Button2" Grid.Row="0" Grid.Column="1" Style="{StaticResource SmallButton}" 
                         Content="Sair" Margin="40, -240, 0, 0" Click="Button2_Click" />
-           
+                
             </TextBlock>
 
             
-
         </Grid>
         
   
-
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -99,7 +90,7 @@
         </Grid>
 
         <!-- ====== Footer ====== -->
-        <StatusBar Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
+        <StatusBar Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="#ff6e6e6e">
             <StatusBarItem Content="{Binding StatusText}" />
         </StatusBar>
 
