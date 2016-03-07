@@ -27,9 +27,10 @@
 
         <!-- ====== Header ====== -->
         <Style x:Key="HeaderTextBlockStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="30" />
+            <Setter Property="FontSize" Value="60" />
             <Setter Property="FontWeight" Value="Light" />
-            <Setter Property="Foreground" Value="#222222" />
+            <Setter Property="Foreground" Value="#FF387F37" />
+            <!--<Setter Property="Foreground" Value="#222222" />-->
         </Style>
 
         <!-- ====== Subheader ====== -->
@@ -47,7 +48,7 @@
             <Setter Property="Foreground" Value="#222222" />
         </Style>
 
-        <!-- =========== Button: Main Page ============== -->
+        <!-- =========== Buttons ============== -->
         <Style x:Key="SmallButton" TargetType="Button">
 
             <Setter Property="Background" Value="#387F37" />

@@ -19,31 +19,17 @@
 
     <Grid >
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
 
         <Grid Grid.Row="0">
-            <!-- ====== Header ====== -->
-            <DockPanel Margin="120 30 0 20">       <!-- left, top, right, bottom -->
-                <TextBlock Style="{StaticResource HeaderTextBlockStyle}">
-                    Kinect2Arff
-                </TextBlock>
-            </DockPanel>
-        </Grid>
-
-
-        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -51,29 +37,61 @@
 
 
             <!-- ====== Main content: Kinect camera view ====== -->
-            <Viewbox Grid.Row="1" Grid.Column="0" 
-                 HorizontalAlignment="Left" Margin="120 10 0 20">
+            <Viewbox Grid.Row="0" Grid.Column="0" 
+                 HorizontalAlignment="Left" Margin="120 80 0 80">
                 <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
             </Viewbox>
 
-            <TextBlock Grid.Row="1" Grid.Column="1">
+
+            <DockPanel Grid.Row="0" Grid.Column="1" Margin="40 60 0 0" >
+                <TextBlock Style="{StaticResource HeaderTextBlockStyle}">
+                    <Bold Foreground="#FF387F37" >
+                        <Run Text="Kinect2Arff" />
+                    </Bold>
+                </TextBlock>
+            </DockPanel>
+
+
+            <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource SubheaderTextBlockStyle}" Margin="40 180 0 0">
+                <Bold Foreground="Gray" FontSize="32">
+                        <Run Text="Instructions:" />
+                </Bold>
+            </TextBlock>
+            
+            <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource SubheaderTextBlockStyle}" Margin="40 200 0 0" >
+  
+                <!--<LineBreak />-->
                 
+                <LineBreak /> Make sure Kinect is tracking your entire body 
+                <LineBreak /> (if you just see part of it, the record will
+                <LineBreak /> not work properly).
+                <LineBreak />
+                <LineBreak /> Press "Gravar" to start record a gesture.
+                <LineBreak /> 
+                <LineBreak /> Press "Salvar" to generate an Arff file with
+                <LineBreak /> the data, or "Descartar" to start over.
+               
+
+            </TextBlock>
+
+            <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom">
                 <!-- ====== Buttons ====== -->
                 <Button x:Name="Button1" Grid.Row="1" Grid.Column="1" Style="{StaticResource SmallButton}" 
-                        Content="Gravar" Margin="20, 10, 0, 0" Click="Button1_Click" />
-                         
-                <LineBreak />
+                        Content="Gravar" Margin="40, -240, 0, 0" Click="Button1_Click" />
 
-                <Button x:Name="Button2" Grid.Row="1" Grid.Column="1" Style="{StaticResource SmallButton}" 
-                        Content="Sair" Margin="20, 20, 0, 0" Click="Button2_Click" />
+
+                <Button x:Name="Button2" Grid.Row="0" Grid.Column="1" Style="{StaticResource SmallButton}" 
+                        Content="Sair" Margin="40, -240, 0, 0" Click="Button2_Click" />
            
             </TextBlock>
+
+            
 
         </Grid>
         
   
 
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -81,7 +99,7 @@
         </Grid>
 
         <!-- ====== Footer ====== -->
-        <StatusBar Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
+        <StatusBar Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
             <StatusBarItem Content="{Binding StatusText}" />
         </StatusBar>
 
