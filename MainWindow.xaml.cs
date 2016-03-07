@@ -216,7 +216,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             string Label1 = Button1.Content.ToString();
             if (Label1.Equals("Gravar"))
             {
-                Button1.Content = "Efetivar";
+                Button1.Content = "Salvar";
                 Button2.Content = "Descartar";
 
                 if (_firstFrame)
