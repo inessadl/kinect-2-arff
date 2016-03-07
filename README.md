@@ -15,6 +15,6 @@ Gets Kinect body data (joint positions) and exports to Attribute-Relation File F
 ## References
 [Kinect Coordinate Mapping](https://msdn.microsoft.com/en-us/library/dn785530.aspx)
 
-[Kinect2CSV](https://github.com/LightBuzz/Kinect-2-CSV) from **LightBuzz**
+[Kinect2CSV](https://github.com/LightBuzz/Kinect-2-CSV) from LightBuzz
 
-[Vitruvius](https://github.com/LightBuzz/Vitruvius) from **LightBuzz**
+[Vitruvius](https://github.com/LightBuzz/Vitruvius) from LightBuzz
