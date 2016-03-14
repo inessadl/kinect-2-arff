@@ -22,23 +22,13 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
     using System.Windows.Input;
     using System.Windows.Navigation;
 
-    //Beta
 
-
-    /// <summary>
-    /// Interaction logic for the MainWindow
-    /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        /// <summary>
         /// Size of the RGB pixel in the bitmap
-        /// </summary>
         private const int BytesPerPixel = 4;
 
-        /// <summary>
         /// Collection of colors to be used to display the BodyIndexFrame data.
-        /// </summary>
-        /// TODO: Verificar problema de não inicializar com qualquer cor
         private static readonly uint[] BodyColor =
         {
             0x0000FF00,
@@ -51,55 +41,38 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         };
 
 
-
-        /// <summary>
         /// Active Kinect sensor
-        /// </summary>
         private KinectSensor _kinectSensor = null;
 
-        /// <summary>
         /// Reader for body index frames
-        /// </summary>
         private BodyIndexFrameReader _bodyIndexFrameReader = null;
 
-        /// <summary>
         /// Description of the data contained in the body index frame
-        /// </summary>
         private FrameDescription _bodyIndexFrameDescription = null;
 
-        /// <summary>
         /// Bitmap to display
-        /// </summary>
         private WriteableBitmap _bodyIndexBitmap = null;
 
-        /// <summary>
         /// Intermediate storage for frame data converted to color
-        /// </summary>
         private uint[] _bodyIndexPixels = null;
 
-        /// <summary>
         /// Current status text to display
-        /// </summary>
         private string _statusText = null;
 
-        /// <sumarry>
         /// Buffer to save data
-        /// </sumarry>
         KinectFileManager _recorder = null;
         BodyFrameReader _reader = null;
         IList<Body> _bodies = null;
         bool _firstFrame = true;
 
 
-        /// <summary>
         /// Initializes a new instance of the MainWindow class.
-        /// </summary>
         public MainWindow()
         {
             // get the _kinectSensor object
             this._kinectSensor = KinectSensor.GetDefault();
 
-            // open the reader for the depth frames
+            // open the reader for bodyIndex frames
             this._bodyIndexFrameReader = this._kinectSensor.BodyIndexFrameSource.OpenReader();
 
             // wire handler for frame arrival
@@ -125,7 +98,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             this.StatusText = this._kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                             : Properties.Resources.NoSensorStatusText;
 
-            // use the window object as the view model in this simple example
+            // use the window object as a view model
             this.DataContext = this;
 
             // initialize the components (controls) of the window
@@ -148,14 +121,10 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
         }
 
-        /// <summary>
         /// INotifyPropertyChangedPropertyChanged event to allow window controls to bind to changeable data
-        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-        /// <summary>
         /// Gets the bitmap to display
-        /// </summary>
         public ImageSource ImageSource
         {
             get
@@ -164,9 +133,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             }
         }
 
-        /// <summary>
         /// Gets or sets the current status text to display
-        /// </summary>
         public string StatusText
         {
             get
@@ -189,11 +156,11 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             }
         }
 
-        /// <summary>
+
         /// Execute shutdown tasks
         /// </summary>
-        /// <param name="sender">object sending the event</param>
-        /// <param name="e">event arguments</param>
+        /// <param name ="sender">object sending the event</param>
+        /// <param name ="e">event arguments</param>
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (this._bodyIndexFrameReader != null)
@@ -211,6 +178,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
         }
 
+        // Button1: Save / Back
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
             string Label1 = Button1.Content.ToString();
@@ -239,6 +207,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         }
 
 
+        // Button 2: Record / Exit
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
             string Label2 = Button2.Content.ToString();
@@ -280,9 +249,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
         }
 
 
-        /// <summary>
         /// Handles the body index frame data arriving from the sensor
-        /// </summary>
         /// <param name="sender">object sending the event</param>
         /// <param name="e">event arguments</param>
         private void Reader_FrameArrived(object sender, BodyIndexFrameArrivedEventArgs e)
@@ -314,12 +281,10 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             }
         }
 
-        /// <summary>
         /// Directly accesses the underlying image buffer of the BodyIndexFrame to
         /// create a displayable bitmap.
         /// This function requires the /unsafe compiler option as we make use of direct
         /// access to the native memory pointed to by the bodyIndexFrameData pointer.
-        /// </summary>
         /// <param name="bodyIndexFrameData">Pointer to the BodyIndexFrame image data</param>
         /// <param name="bodyIndexFrameDataSize">Size of the BodyIndexFrame image data</param>
         private unsafe void ProcessBodyIndexFrameData(IntPtr bodyIndexFrameData, uint bodyIndexFrameDataSize)
@@ -346,9 +311,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
             }
         }
 
-        /// <summary>
         /// Renders color pixels into the writeableBitmap.
-        /// </summary>
         private void RenderBodyIndexPixels()
         {
             this._bodyIndexBitmap.WritePixels(
@@ -358,9 +321,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                 0);
         }
 
-        /// <summary>
         /// Handles the event which the sensor becomes unavailable (E.g. paused, closed, unplugged).
-        /// </summary>
         /// <param name="sender">object sending the event</param>
         /// <param name="e">event arguments</param>
         private void Sensor_IsAvailableChanged(object sender, IsAvailableChangedEventArgs e)

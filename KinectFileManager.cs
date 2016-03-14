@@ -13,18 +13,18 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 {
     class KinectFileManager
     {
-         Joint[] _lastJoint = new Joint[25]; //create an array to save the last Joint position in x,y, and z axis
-         Joint[] _sumJoints = new Joint[25]; //create an array to save the sum Joint position in x,y, and z axis
+         Joint[] _lastJoint = new Joint[25];                // array to save the last joint position (x, y, z)
+         Joint[] _sumJoints = new Joint[25];                // array to save the sum of joints position (x, y, z)
 
-         public bool IsRecording { get; protected set; } //Record status
+         public bool IsRecording { get; protected set; }    // record status
 
-         public string Folder { get; protected set; } //Folder name
+         public string Folder { get; protected set; }       // folder name
 
-         public string Result { get; protected set; } //Final stream/file name
+         public string Result { get; protected set; }       // final stream/file name
 
-         private bool HasListedtedJoints { get; set; } //Flag used to writte header file
+         private bool HasListedtedJoints { get; set; }      // flag used to write header file
 
-         private int StreamLineNumber { get; set; } //File line that will set stream buffer
+         private int StreamLineNumber { get; set; }         // file line that will set stream buffer
 
          public void Update(Body body)
          {
@@ -42,13 +42,13 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
              StringBuilder line = new StringBuilder();
              using (writer)
              {
-                 //TODO: change word gesto to moviment name
+
                  line.Append("@RELATION gesto");
                  line.AppendLine();
 
                  if (!HasListedtedJoints)
                  {
-                     //add the headers to a file
+                     //add the headers to the file
                      foreach (var joint in body.Joints.Values)
                      {
                          line.Append(string.Format("@ATTRIBUTE {0}X", joint.JointType.ToString()));
@@ -86,7 +86,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
                  else
                  {
                      i = 0;
-                     //calculate the Joints Positions module
+                     //calculate the joints positions module
                      foreach (var joint in body.Joints.Values)
                      {
                          if (joint.Position.X > _lastJoint[i].Position.X)
@@ -120,7 +120,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
 
                      i = 0;
 
-                     //get the new Joints values
+                     // get the new joints values
                      foreach (var joint in body.Joints.Values)
                      {
                          _lastJoint[i].Position.X = joint.Position.X;
@@ -136,7 +136,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
              }
          }
 
-         //Init all values
+         // Initialize all values
          public void Start()
          {
              Folder = DateTime.Now.ToString("yyy_MM_dd_HH_mm_ss");
@@ -146,8 +146,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
              StreamLineNumber = 0;
          }
 
-         //Save all stream values in a file
-         //while was the index value less than StreamLineNumber
+         // Save all stream values in a file while index value is less than StreamLineNumber
          public void Stop()
          {
              IsRecording = false;
@@ -174,8 +173,8 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
              }
          }
 
-         //Add new gesture values in current stream
-         //All values corresponding one gesture stay on the same line
+         // Add new gesture values in current stream
+         // All values of a gesture stay on the same line
          public void Pause()
          {
              IsRecording = true;
@@ -194,7 +193,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
              }
          }
 
-         //Reset all values to get a new gesture
+         // Reset all values to get a new gesture
          public void Continue()
          {
              for (int i = 0; i < 25; i++)
@@ -206,7 +205,7 @@ namespace Microsoft.Samples.Kinect.BodyIndexBasics
              IsRecording = true;
           }
 
-         //Reset all values
+         // Reset all values
          public void Discard()
            {
              IsRecording = true;
